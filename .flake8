@@ -1,0 +1,15 @@
+[flake8]
+# Ignore unnecessary strict rules for migration files etc.
+exclude = migrations,venv,__pycache__
+# Allow longer lines (common in Django settings or URLs)
+max-line-length = 120
+# Show more readable error outputs
+max-complexity = 10
+count = True
+
+# Ignore specific error types globally
+# E501 (line too long) handled via increased limit
+# F401 (unused imports) ignored in migrations and __init__.py files
+per-file-ignores =
+    __init__.py: F401
+    */migrations/*: E501,F401
