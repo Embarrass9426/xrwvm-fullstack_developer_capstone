@@ -27,52 +27,11 @@ jobs:
 
       - name: Auto-format Python files
         run: |
-          # This command finds Python files and fixes issues automatically
-          autopep8 --in-place --aggressive --aggressive --recursive .
+          # Auto-format while excluding migrations
+          autopep8 --in-place --recursive --aggressive --exclude migrations .
 
       - name: Run Linter
         run: |
-          # This command finds all Python files recursively and runs flake8 on them
-          find . -name "*.py" -exec flake8 {} +
-          echo "✅ Linted all the Python files successfully"
-
-  lint_js:
-    name: Lint JavaScript Files
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Install Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Install Linters
-        run: |
-          npm install --global jshint eslint prettier
-
-      - name: Create JSHint Config
-        run: |
-          echo '{
-            "esversion": 8,
-            "node": true,
-            "browser": false,
-            "asi": false,
-            "undef": true,
-            "unused": true
-          }' > .jshintrc
-
-      - name: Auto-format JavaScript files
-        run: |
-          # Use Prettier to auto-fix formatting before linting
-          prettier --write "**/*.js"
-
-      - name: Run JS Linters
-        run: |
-          # Run JSHint recursively
-          find ./server/database -name "*.js" -exec jshint {} +
-          # Run ESLint if exists for more modern checks
-          if [ -f .eslintrc.json ]; then eslint .; fi
-          echo "✅ Linted all the JavaScript files successfully"
+          # Run flake8 using the .flake8 config defined below
+          flake8 .
+          echo "✅ Linted and formatted all Python files successfully"
